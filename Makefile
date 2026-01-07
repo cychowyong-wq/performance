@@ -19,8 +19,15 @@ verify-%: $(VERIFY) implementation/%.c | $(BIN)
 
 # build profile-<impl> (timing + perf compatible)
 profile-%: $(BENCHMARK) implementation/%.c | $(BIN)
-	$(CC) $(CFLAGS) $(INCLUDE) $^ -o bin/$@
-	./bin/$@ 
+	$(CC) $(CFLAGS) $(INCLUDE) $^ -o bin/$@ -lm
+	mkfifo perf_ctl.fifo
+	mkfifo perf_ack.fifo
+	taskset -c 1 perf stat \
+	-e cycles,instructions,branches,branch-misses,cache-misses \
+	--control=fifo:perf_ctl.fifo,perf_ack.fifo \
+	./bin/$@
+	rm -rf perf_ctl.fifo perf_ack.fifo
+	
 
 # verify all implementations
 verify: $(addprefix verify-,$(IMPLS))
