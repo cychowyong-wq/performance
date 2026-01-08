@@ -61,14 +61,6 @@ int main(void)
         }
     }
 
-    /* run profile for perf cache */
-    printf("Start Profile\n");
-    int ctl_fd = open("perf_ctl.fifo", O_WRONLY);
-    write(ctl_fd, "enable\n", 7); // START
-    matmul(mat_a, mat_b, mat_result, MATRIX_SIZE, MATRIX_SIZE, MATRIX_SIZE);
-    write(ctl_fd, "disable\n", 8); // STOP
-    close(ctl_fd);
-
     /* warmup cache */
     printf("Warming up cache...\n");
     for (int i = 0; i < WARMUP_ITER; i++)
@@ -98,6 +90,14 @@ int main(void)
     printf("  mean    = %.3f us\n", mean);
     printf("  stddev  = %.3f us\n", stddev);
     printf("  rel-var = %.2f %%\n", (stddev / mean) * 100.0);
+
+    /* run profile for perf cache */
+    printf("Start Profile\n");
+    int ctl_fd = open("perf_ctl.fifo", O_WRONLY);
+    write(ctl_fd, "enable\n", 7); // START
+    matmul(mat_a, mat_b, mat_result, MATRIX_SIZE, MATRIX_SIZE, MATRIX_SIZE);
+    write(ctl_fd, "disable\n", 8); // STOP
+    close(ctl_fd);
 
     free(mat_a);
     free(mat_b);
