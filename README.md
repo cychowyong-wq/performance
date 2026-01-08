@@ -22,6 +22,8 @@ The goal of this project is to step by step example to measure the efficiency of
 - the idea is to make each implementation like a plugin, all share a common interface defined in `/implementation/implementation.h`, each implementation will also locate under same directory
 - A tradeoff is made when choosing implementation method, instead of using function pointer to point to different implementation, which is faster to implement, a more complicated Makefile is used which standardize verify and profiling method in each case. 
 
-## TODO
-1. add better approach for matrix multiplication
-2. use a better approach to use perf
+### Example output
+| Algorithm    | Execution Time (us) | Insn per cycle | branch miss (k) | cache miss (k) |
+| -------- | ------- | ------- | ------- | ------- |
+| Naive  | 131,544 | 2.17 | 6,895 | 1,867 |
+| submatrix | 85,463 | 4.39 | 494 | 1,069 |
