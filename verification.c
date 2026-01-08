@@ -12,6 +12,7 @@ bool verify_result(int *mat_a, int *mat_b, int w, int h)
         {
             if (mat_a[i * w + j] != mat_b[i * w + j])
             {
+                printf("Mismatch at (%d, %d): %d != %d\n", i, j, mat_a[i * w + j], mat_b[i * w + j]);
                 return false;
             }
         }
@@ -47,7 +48,7 @@ int main(void)
 
     /* verify native implementation correctness */
     matmul((int *)input_mat_a, (int *)input_mat_b, (int *)result, 4, 3, 4);
-    assert(verify_result((int *)result, (int *)output_mat, 4, 4) && "Naive Implementation Verification ERROR !!!");
+    assert(verify_result((int *)result, (int *)output_mat, 4, 4) && "Implementation Verification ERROR !!!");
 
     printf("Implementation Verification PASSED !!!\n");
 
